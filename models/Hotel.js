@@ -32,6 +32,21 @@ const HotelSchema = new mongoose.Schema(
       // required: [true, "Please provide company name"],
       maxlength: 5,
     },
+    image: {
+      type: String,
+      // required: [true, "Please provide company name"],
+      // maxlength: 5,
+    },
+    foods: {
+      type: Array,
+      // required: [true, "Please provide company name"],
+      // maxlength: 5,
+    },
+    foodImage: {
+      type: Array,
+      // required: [true, "Please provide company name"],
+      // maxlength: 5,
+    },
     // createdBy: {
     //   type: mongoose.Types.ObjectId,
     //   ref: "User",

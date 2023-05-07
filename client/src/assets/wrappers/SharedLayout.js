@@ -1,8 +1,8 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 const Wrapper = styled.section`
   .dashboard {
-    display: grid;
+    // display: grid;
     grid-template-columns: 1fr;
   }
   .dashboard-page {
@@ -18,5 +18,5 @@ const Wrapper = styled.section`
       width: 90%;
     }
   }
-`
-export default Wrapper
+`;
+export default Wrapper;

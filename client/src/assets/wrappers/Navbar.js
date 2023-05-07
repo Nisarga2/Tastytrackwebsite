@@ -85,6 +85,7 @@ const Wrapper = styled.nav`
     top: 0;
 
     .nav-center {
+      // width: 100%;
     }
     .logo-text {
       display: block;

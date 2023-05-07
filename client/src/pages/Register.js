@@ -7,6 +7,7 @@ const initialState = {
   name: "",
   email: "",
   password: "",
+  role: "",
   isMember: true,
 };
 
@@ -25,13 +26,13 @@ const Register = () => {
   };
   const onSubmit = (e) => {
     e.preventDefault();
-    const { name, email, password, isMember } = values;
-
-    if (!email || !password || (!isMember && !name)) {
+    const { name, email, password, role, isMember } = values;
+    console.log(role);
+    if (!email || !password || (!isMember && !name && !role)) {
       displayAlert();
       return;
     }
-    const currentUser = { name, email, password };
+    const currentUser = { name, email, password, role };
     if (isMember) {
       setupUser({
         currentUser,
@@ -67,6 +68,14 @@ const Register = () => {
             type="text"
             name="name"
             value={values.name}
+            handleChange={handleChange}
+          />
+        )}
+        {!values.isMember && (
+          <FormRow
+            type="text"
+            name="role"
+            value={values.role}
             handleChange={handleChange}
           />
         )}

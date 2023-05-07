@@ -19,9 +19,13 @@ const Navbar = () => {
           <div className="nav-bar-link">
             <NavLink to="/">Dashboard </NavLink>
           </div>
-          <div className="nav-bar-link">
-            <NavLink to="/add-hotel">Add Hotels</NavLink>
-          </div>
+          {user.role == "admin" ? (
+            <div className="nav-bar-link">
+              <NavLink to="/add-hotel">Add Hotels</NavLink>
+            </div>
+          ) : (
+            ""
+          )}
           <div className="nav-bar-link">
             <NavLink to="/all-jobs"> Hotels </NavLink>
           </div>

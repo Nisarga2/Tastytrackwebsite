@@ -26,6 +26,12 @@ const UserSchema = new mongoose.Schema({
     minlength: 6,
     select: false,
   },
+  role: {
+    type: String,
+    trim: true,
+    required: [true, "please provide role"],
+    maxlenght: 20,
+  },
   lastname: {
     type: String,
     trim: true,

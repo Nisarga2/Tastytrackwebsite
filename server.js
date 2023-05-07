@@ -26,7 +26,7 @@ import errorHandlerMiddleware from "./middleware/error-handler.js";
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 
 app.get("/", (req, res) => {
   // throw new Error("error");

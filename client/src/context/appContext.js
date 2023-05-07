@@ -8,6 +8,8 @@ import {
   SETUP_USER_ERROR,
   TOGGLE_SIDEBAR,
   LOGOUT_USER,
+  GET_HOTEL_BEGIN,
+  GET_HOTEL_SUCCESS,
 } from "./action";
 import reducer from "./reducer";
 
@@ -30,6 +32,11 @@ const initialState = {
 const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  // axios setup
+  const authFetch = axios.create({
+    baseURL: "/api/v1",
+  });
 
   const displayAlert = () => {
     dispatch({ type: DISPLAY_ALERT });
@@ -82,9 +89,37 @@ const AppProvider = ({ children }) => {
     dispatch({ type: LOGOUT_USER });
     removeUserToLocalstorage();
   };
+
+  const getHotels = async () => {
+    let url = `/hotel`;
+
+    dispatch({ type: GET_HOTEL_BEGIN });
+    try {
+      const { data } = await authFetch(url);
+      // console.log(data);
+      // const { books } = data;
+      dispatch({
+        type: GET_HOTEL_SUCCESS,
+        payload: {
+          data,
+        },
+      });
+    } catch (error) {
+      console.log(error.response);
+      // logoutUser();
+    }
+    clearAlert();
+  };
   return (
     <AppContext.Provider
-      value={{ ...state, displayAlert, setupUser, toggleSidebar, logoutUser }}
+      value={{
+        ...state,
+        displayAlert,
+        setupUser,
+        toggleSidebar,
+        logoutUser,
+        getHotels,
+      }}
     >
       {children}
     </AppContext.Provider>

@@ -3,6 +3,8 @@ import Box from "@mui/material/Box";
 import { Button, TextField, Typography } from "@mui/material";
 import { HotelService } from "../../service/HotelService";
 import { useState } from "react";
+import { useEffect } from "react";
+import "./addHotel.css"; // Import the CSS file
 
 const AddHotel = () => {
   const [postImage, setPostImage] = useState({
@@ -38,35 +40,48 @@ const AddHotel = () => {
     });
   };
 
-  const onBookSubmit = async (e) => {
+  const onHotelSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
-    let bookObj = {
+    let hotelObj = {
       name: data.get("hotelName"),
       description: data.get("description"),
       type: data.get("hotelType"),
       location: data.get("location"),
       address: data.get("address"),
       rating: data.get("rating"),
+      offer: data.get("offer"),
       image: postImage.myFile,
       foods: data.get("foods").split(","),
+      cost: data.get("cost").split(","),
       foodImage: postMultiImage,
     };
-    console.log(bookObj);
+    console.log(hotelObj);
     try {
-      let response = await HotelService.CreateHotel(bookObj);
+      let response = await HotelService.CreateHotel(hotelObj);
       console.log(response);
     } catch (error) {
       alert(error.message);
     }
   };
+  
   return (
-    <div>
+    <div
+      style={{
+        height: "100%",
+      }}
+    >
       {/* <form className="form"> */}
       <Box
         component="form"
-        onSubmit={onBookSubmit}
-        sx={{ flexGrow: 1, backgroundColor: "white", p: "20px" }}
+        onSubmit={onHotelSubmit}
+        sx={{
+          flexGrow: 1,
+          backgroundColor: "white",
+          p: "20px",
+          color: "black",
+          borderRadius: "10px",
+        }}
       >
         <Typography
           sx={{
@@ -79,6 +94,7 @@ const AddHotel = () => {
         <Grid container spacing={2}>
           <Grid item xs={2}>
             <TextField
+              fullWidth
               size="small"
               id="hotelName"
               name="hotelName"
@@ -88,6 +104,7 @@ const AddHotel = () => {
           </Grid>
           <Grid item xs={2}>
             <TextField
+              fullWidth
               size="small"
               id="description"
               name="description"
@@ -97,6 +114,7 @@ const AddHotel = () => {
           </Grid>
           <Grid item xs={2}>
             <TextField
+              fullWidth
               size="small"
               id="hotelType"
               name="hotelType"
@@ -106,6 +124,7 @@ const AddHotel = () => {
           </Grid>
           <Grid item xs={2}>
             <TextField
+              fullWidth
               size="small"
               id="location"
               name="location"
@@ -113,18 +132,31 @@ const AddHotel = () => {
               variant="outlined"
             />
           </Grid>
-          {/* <Grid item xs={2}>
-            <TextField
-              size="small"
-              id=""
-              name=""
-              label=""
-              variant="outlined"
-            />
-          </Grid> */}
           <Grid item xs={2}>
             <TextField
-              // fullWidth
+              fullWidth
+              size="small"
+              id="rating"
+              name="rating"
+              label="Rating"
+              variant="outlined"
+              inputProps={{ maxLength: 5 }}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <TextField
+              fullWidth
+              size="small"
+              id="offer"
+              name="offer"
+              label="Offers"
+              variant="outlined"
+              inputProps={{ maxLength: 2 }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
               size="small"
               id="address"
               name="address"
@@ -132,17 +164,9 @@ const AddHotel = () => {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={2}>
-            <TextField
-              size="small"
-              id="rating"
-              name="rating"
-              label="Rating"
-              variant="outlined"
-            />
-          </Grid>
           <Grid item xs={3}>
             <TextField
+              fullWidth
               size="small"
               id="image"
               name="image"
@@ -165,6 +189,7 @@ const AddHotel = () => {
           </Grid>
           <Grid item xs={3}>
             <TextField
+              fullWidth
               size="small"
               id="foodImage"
               name="foodImage"
@@ -178,6 +203,16 @@ const AddHotel = () => {
               onChange={(e) => handleMultipleFileUpload(e)}
             />
           </Grid>
+          <Grid item xs={9}>
+            <TextField
+              fullWidth
+              size="small"
+              id="cost"
+              name="cost"
+              label="Cost"
+              variant="outlined"
+            />
+          </Grid>
         </Grid>
         <Box
           sx={{
@@ -186,7 +221,7 @@ const AddHotel = () => {
         >
           <Button
             sx={{
-              backgroundColor: "#2BC1CB",
+              backgroundColor: "#66e137",
               // color: "#2BC1CB",
             }}
             variant="contained"

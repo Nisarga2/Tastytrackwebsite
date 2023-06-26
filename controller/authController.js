@@ -6,7 +6,7 @@ import { BadRequestError, unAuthenticatedError } from "../errors/index.js";
 // * custume Error Api
 
 const register = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, image } = req.body;
 
   if (!name || !email || !password || !role) {
     throw new BadRequestError("please provide all values");
@@ -17,7 +17,7 @@ const register = async (req, res) => {
     throw new BadRequestError("Email already in use");
   }
 
-  const user = await User.create({ name, email, password, role });
+  const user = await User.create({ name, email, password, role, image });
   const token = user.createJWT();
   res.status(StatusCodes.CREATED).json({
     user: {
@@ -25,6 +25,7 @@ const register = async (req, res) => {
       lastName: user.lastname,
       location: user.location,
       name: user.name,
+      image: user.image,
       role: user.role,
     },
     token,

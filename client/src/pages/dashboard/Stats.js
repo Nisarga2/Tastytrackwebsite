@@ -2,10 +2,12 @@ import Wrapper from "../../assets/wrappers/DashboardFormPage";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { styled, alpha } from "@mui/material/styles";
-import { FaSearch, FaStar } from "react-icons/fa";
+import { FaSearch, FaStar, FaHeart } from "react-icons/fa";
 import InputBase from "@mui/material/InputBase";
 import { useAppContext } from "../../context/appContext";
 import { useEffect, useState } from "react";
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 import {
   AppBar,
@@ -16,9 +18,11 @@ import {
   CardContent,
   CardMedia,
   Modal,
+  Rating,
   TextField,
   Toolbar,
   Typography,
+  colors,
 } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
@@ -69,7 +73,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: "background.paper",
+  bgcolor: "#222",
   border: "2px solid #000",
   boxShadow: 24,
   pt: 2,
@@ -85,6 +89,7 @@ const Stats = () => {
   const [rating, setRating] = useState([]);
   const [foods, setFoods] = useState([]);
   const [quantity, setQuantity] = useState(0);
+  const [value, setValue] = useState(2);
 
   const handleOpen = (e) => {
     let selectedHotel = hotelList.find((r) => r._id === e.target.id);
@@ -94,10 +99,11 @@ const Stats = () => {
     }
     let foodsMap = [];
     selectedHotel.foods.forEach((f, index) => {
-      foodsMap.push({ id: index, food: f });
+      console.log(f);
+      foodsMap.push({ id: index, food: f, offer: 20 });
     });
     for (let k = 0; k < foodsMap.length; k++) {
-      console.log(selectedHotel.foodImage[k]);
+      foodsMap[k].cost = selectedHotel.cost[k];
       foodsMap[k].image = selectedHotel.foodImage[k]
         ? selectedHotel.foodImage[k].i
         : "https://picsum.photos/300/300?random=2";
@@ -105,6 +111,10 @@ const Stats = () => {
     console.log(foodsMap);
     setFoods(foodsMap);
     setOpen(true);
+
+    setTimeout(() => {
+      handleROpen();
+    }, 5000);
   };
   const handleClose = () => {
     setOpen(false);
@@ -119,6 +129,67 @@ const Stats = () => {
     setHotelList(hotels);
   }, 1000);
 
+  const [cart, setCart] = useState([]);
+  const onAddToCart = (v) => {
+    // debugger;
+    // if (cart == []) {
+    cart.push(v);
+    alert("Added to Cart Successfully");
+    // } else {
+    // cart.forEach((item) => {
+    //   if (item.id != v.id) cart.push(v);
+    // });
+    // }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    console.log(cart);
+  };
+
+  const [filterHotel, setFilterText] = useState("");
+
+  const onfilter = (e) => {
+    // setText(e.target.value);
+    // Specify your filter criteria here
+    let text = e.target.value;
+    console.log(text);
+    const filteredHotel = hotels.filter((hotel) => {
+      return (
+        hotel.name.toUpperCase() === text.toUpperCase() ||
+        hotel.location.toUpperCase() === text.toUpperCase()
+      );
+    });
+    setFilterText(filteredHotel);
+    if (e.target.value == "") {
+      setFilterText("");
+    }
+  };
+
+  const onClearFilter = () => {
+    setFilterText("");
+  };
+  const [wishlist, setWishlist] = useState([]);
+
+  const onAddToWishList = (v) => {
+    // debugger;
+    // if (cart == []) {
+    wishlist.push(v);
+    alert("Added to wishlist Successfully");
+    // } else {
+    // cart.forEach((item) => {
+    //   if (item.id != v.id) cart.push(v);
+    // });
+    // }
+    localStorage.setItem("FoodWishlist", JSON.stringify(wishlist));
+    console.log(wishlist);
+  };
+
+  const [Ropen, setROpen] = useState(false);
+  const handleROpen = () => {
+    setROpen(true);
+  };
+  const handleRClose = () => {
+    setROpen(false);
+  };
+
   return (
     <Box>
       <Box sx={{}}>
@@ -126,7 +197,7 @@ const Stats = () => {
           <AppBar
             position="static"
             sx={{
-              backgroundColor: "#2cb1bc",
+              backgroundColor: "#66e137",
             }}
           >
             <Toolbar>
@@ -136,9 +207,9 @@ const Stats = () => {
                 component="div"
                 sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
               >
-                BOOK LIBRARY
+                Tasty Tracker
               </Typography>
-              <Search>
+              <Search onChange={onfilter}>
                 <SearchIconWrapper>
                   <FaSearch />
                 </SearchIconWrapper>
@@ -147,17 +218,17 @@ const Stats = () => {
                   inputProps={{ "aria-label": "search" }}
                 />
               </Search>
-              <Button
+              {/* <Button
                 sx={{
-                  backgroundColor: "#2cb1bc",
+                  backgroundColor: "#6C63FF",
                   "&:hover": {
-                    backgroundColor: "#177178",
+                    backgroundColor: "#6C63FF",
                   },
                 }}
                 variant="contained"
               >
                 Search
-              </Button>
+              </Button> */}
               {/* <Box
                 sx={{
                   margin: "0px 15px 0px 15px",
@@ -174,7 +245,13 @@ const Stats = () => {
       <Box
         component="form"
         // onSubmit={onBookSubmit}
-        sx={{ flexGrow: 1, backgroundColor: "white", p: "20px" }}
+        sx={{
+          flexGrow: 1,
+         // backgroundImage: `url(${"dashboard.svg"})`,
+          // backgroundRepeat: "no-repeat",
+          p: "20px",
+          color: "white",
+        }}
       >
         <Typography
           sx={{
@@ -182,44 +259,175 @@ const Stats = () => {
           }}
           variant="h4"
         >
-          Restaurants and Hotels
+          Restaurants and Hotel
         </Typography>
+        <div>
+          
+  <Carousel
+    showThumbs={false}
+    style={{ height: '300px', width: '100px', backgroundColor: 'gray', borderRadius: '10px' }}
+  >
+    {/* Carousel items */}
+    
+    <div>
+      <img src={"cur.png"} alt="Photo 2" height="500" width="100" />
+    </div>
+    <div>
+      <img src={"cur2.png"} alt="Photo 2" height="500" width="100" />
+    </div>
+    <div>
+      <img src={"cur.png"} alt="Photo 2" height="500" width="100" />
+    </div>
+    <div>
+      <img src={"cur.png"} alt="Photo 2" height="500" width="100" />
+    </div>
+    <div>
+      <img src={"cur.png"} alt="Photo 2" height="500" width="100" />
+    </div>
+    {/* Add more carousel items as needed */}
+  </Carousel>
+</div>
+
+
+        {filterHotel.length != 0 ? (
+          <Box display={"flex"} justifyContent={"space-between"}>
+            <h4>Filtered Hotel</h4>
+            <Button
+              onClick={onClearFilter}
+              sx={{
+                color: "#66e137",
+              }}
+            >
+              {" "}
+              Clear Filter
+            </Button>
+          </Box>
+        ) : (
+          ""
+        )}
+        <Grid container sx={{ paddingBottom: "40px" }} spacing={2}>
+          {filterHotel
+            ? filterHotel.map((hotel) => (
+                <Grid item xs={4} sx={{}}>
+                  <Card
+                    sx={{
+                      backgroundColor: "black",
+                      color: "white",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <CardContent sx={{ flex: "1 0 auto" }}>
+                        <Typography
+                          sx={{ fontSize: 14 }}
+                          // color
+                          gutterBottom
+                        >
+                          Word of the Food
+                        </Typography>
+                        <Typography variant="h5" component="div">
+                          {hotel.name}
+                        </Typography>
+                        <Typography sx={{ mb: 1.5 }}>
+                          {hotel.location}
+                        </Typography>
+                        <Typography variant="body2">
+                          {hotel.description.slice(0, 10)}
+                          <br />
+                          {'"a benevolent smile"'}
+                        </Typography>
+                        <CardActions>
+                          <Button
+                            sx={{
+                              color: "#66e137",
+                            }}
+                            onClick={handleOpen}
+                            id={hotel._id}
+                            size="small"
+                          >
+                            Order food
+                          </Button>
+                        </CardActions>
+                      </CardContent>
+                    </Box>
+                    <CardMedia
+                      component="img"
+                      sx={{ width: 200 }}
+                      image={hotel.image}
+                      backgroundSize="cover"
+                      alt="Live from space album cover"
+                    />
+                  </Card>
+                </Grid>
+              ))
+            : ""}
+        </Grid>
+
         <Grid container spacing={2}>
           {hotelList ? (
             hotelList.map((hotel, index) => {
               return (
-                <Grid item xs={3}>
-                  <Card sx={{ minWidth: 275 }}>
+                <Grid item xs={4} sx={{}}>
+                  <Card
+                    sx={{
+                      backgroundColor: "black",
+                      color: "white",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <CardContent sx={{ flex: "1 0 auto" }}>
+                        <Typography
+                          sx={{ fontSize: 14 }}
+                          // color
+                          gutterBottom
+                        >
+                          Word of the Food
+                        </Typography>
+                        <Typography variant="h5" component="div">
+                          {hotel.name}
+                        </Typography>
+                        <Typography sx={{ mb: 1.5 }}>
+                          {hotel.location}
+                        </Typography>
+                        <Typography variant="body2">
+                          {hotel.description.slice(0, 10)}
+                          <br />
+                          {'"a benevolent smile"'}
+                        </Typography>
+                        <CardActions>
+                          <Button
+                            sx={{
+                              color: "#66e137",
+                            }}
+                            onClick={handleOpen}
+                            id={hotel._id}
+                            size="small"
+                          >
+                            Order food
+                          </Button>
+                        </CardActions>
+                      </CardContent>
+                    </Box>
                     <CardMedia
-                      sx={{ height: 150 }}
+                      component="img"
+                      sx={{ width: 200 }}
                       image={hotel.image}
-                      title="green iguana"
+                      backgroundSize="cover"
+                      alt="Live from space album cover"
                     />
-                    <CardContent>
-                      <Typography
-                        sx={{ fontSize: 14 }}
-                        color="text.secondary"
-                        gutterBottom
-                      >
-                        Word of the Food
-                      </Typography>
-                      <Typography variant="h5" component="div">
-                        {hotel.name}
-                      </Typography>
-                      <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        {hotel.location}
-                      </Typography>
-                      <Typography variant="body2">
-                        {hotel.description}
-                        <br />
-                        {'"a benevolent smile"'}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button onClick={handleOpen} id={hotel._id} size="small">
-                        Order food
-                      </Button>
-                    </CardActions>
                   </Card>
                 </Grid>
               );
@@ -236,7 +444,16 @@ const Stats = () => {
         >
           {hotel ? (
             <Box
-              sx={{ ...style, width: 1400, height: 600, overflowY: "scroll" }}
+              sx={{
+                ...style,
+                width: 1400,
+                height: 600,
+                overflowY: "scroll",
+                backgroundImage: `url(${"booking.svg"})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                color: "white",
+              }}
             >
               <h2 id="parent-modal-title">{hotel ? hotel.name : ""}</h2>
               <img src={hotel ? hotel.image : ""} style={{ width: 930 }} />
@@ -253,7 +470,13 @@ const Stats = () => {
               <Grid container spacing={2}>
                 {foods.map((f, index) => (
                   <Grid item xs={3}>
-                    <Card sx={{ minWidth: 275 }}>
+                    {/* <Card
+                      sx={{
+                        minWidth: 275,
+                        backgroundColor: "black",
+                        color: "white",
+                      }}
+                    >
                       <CardMedia
                         sx={{ height: 150 }}
                         image={f.image}
@@ -263,34 +486,77 @@ const Stats = () => {
                         <Typography variant="h5" component="div">
                           {f.food}
                         </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                          price: 40Rs
+                        <Typography sx={{ mb: 1.5 }}>
+                          price: {f.cost ? f.cost : "--"}Rs
                         </Typography>
-                        <ButtonGroup
-                          size="small"
-                          variant="outlined"
-                          id={index}
-                          aria-label="outlined primary button group"
-                        >
-                          <Button
-                            onClick={() =>
-                              setQuantity(quantity >= 0 ? 0 : quantity - 1)
-                            }
-                          >
-                            -
-                          </Button>
-                          <Button>{quantity >= 0 ? quantity : 0}</Button>
-                          <Button onClick={() => setQuantity(quantity + 1)}>
-                            +
-                          </Button>
-                        </ButtonGroup>
                       </CardContent>
                       <CardActions>
-                        {/* <Button onClick={handleOpen} size="small">
-                        Order food
-                      </Button> */}
-                        <ChildModal />
+                        <Button
+                          sx={{
+                            color: "#66e137",
+                          }}
+                          size="small"
+                          onClick={() => onAddToCart(f)}
+                        >
+                          Add to Cart
+                        </Button>
                       </CardActions>
+                    </Card> */}
+                    <Card
+                      sx={{
+                        backgroundColor: "black",
+                        color: "white",
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <CardContent sx={{ flex: "1 0 auto" }}>
+                          <Box
+                            style={{
+                              display: "flex",
+                              // flexDirection: "row",
+                              justifyContent: "space-between",
+                              // alignItems: "",
+                            }}
+                          >
+                            <Typography variant="h5" component="div">
+                              {f.food}
+                            </Typography>
+                            <FaHeart
+                              color="#ff0000"
+                              onClick={() => onAddToWishList(f)}
+                            />
+                          </Box>
+                          <Typography sx={{ mb: 1.5 }}>
+                            price: {f.cost ? f.cost : "--"}Rs
+                          </Typography>
+
+                          <CardActions>
+                            <Button
+                              sx={{
+                                color: "#66e137",
+                              }}
+                              size="small"
+                              onClick={() => onAddToCart(f)}
+                            >
+                              Add to Cart
+                            </Button>
+                          </CardActions>
+                        </CardContent>
+                      </Box>
+                      <CardMedia
+                        component="img"
+                        sx={{ width: 150 }}
+                        image={f.image}
+                        backgroundSize="cover"
+                        alt="Live from space album cover"
+                      />
                     </Card>
                   </Grid>
                 ))}
@@ -301,6 +567,35 @@ const Stats = () => {
           )}
         </Modal>
       </Box>
+      <Box>
+        {/* <Button onClick={handleROpen}>Order food</Button> */}
+        <Modal
+          open={Ropen}
+          onClose={handleRClose}
+          aria-labelledby="child-modal-title"
+          aria-describedby="child-modal-description"
+        >
+          <Box sx={{ ...style, width: 500, color: "#fff" }}>
+            <h2 id="child-modal-title"> Rate the Hotel</h2>
+            <Rating
+              name="simple-controlled"
+              value={value}
+              onChange={(event, newValue) => {
+                setValue(newValue);
+              }}
+            />
+            <p id="child-modal-description">Thank you for your Feedback 😊</p>
+            <Button
+              sx={{
+                color: "#66e137",
+              }}
+              onClick={handleRClose}
+            >
+              Close
+            </Button>
+          </Box>
+        </Modal>
+      </Box>
     </Box>
   );
 };
@@ -308,29 +603,29 @@ const Stats = () => {
 export default Stats;
 
 function ChildModal() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    setOpen(true);
+  const [Ropen, setROpen] = useState(false);
+  const handleROpen = () => {
+    setROpen(true);
   };
-  const handleClose = () => {
-    setOpen(false);
+  const handleRClose = () => {
+    setROpen(false);
   };
 
   return (
     <Box>
-      <Button onClick={handleOpen}>Order Food</Button>
+      <Button onClick={handleROpen}>Order food</Button>
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={Ropen}
+        onClose={handleRClose}
         aria-labelledby="child-modal-title"
         aria-describedby="child-modal-description"
       >
         <Box sx={{ ...style, width: 500 }}>
+          <img width="400px" height="400px" src="tasty.png" />
           <h2 id="child-modal-title">Ordered Food successfully</h2>
-          <p id="child-modal-description">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-          </p>
-          <Button onClick={handleClose}>Close</Button>
+          <h2>💳 Processing Payment</h2>
+          <p id="child-modal-description">Thank you for your order 😊</p>
+          <Button onClick={handleRClose}>Close</Button>
         </Box>
       </Modal>
     </Box>

@@ -8,6 +8,8 @@ import {
   LOGOUT_USER,
   GET_HOTEL_BEGIN,
   GET_HOTEL_SUCCESS,
+  DELETE_HOTEL_BEGIN,
+  DELETE_HOTEL_ERROR,
 } from "./action";
 
 import { initialState } from "./appContext";
@@ -74,6 +76,19 @@ const reducer = (state, action) => {
   if (action.type === GET_HOTEL_SUCCESS) {
     // console.log(action.payload.data);
     return { ...state, isloading: false, hotels: action.payload.data };
+  }
+
+  if (action.type === DELETE_HOTEL_BEGIN) {
+    return { ...state, isLoading: true };
+  }
+  if (action.type === DELETE_HOTEL_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
+    };
   }
 
   throw new Error(`no such action : ${action}`);

@@ -35,6 +35,8 @@ const Wrapper = styled.nav`
     margin: 10px 10px;
     color: var(--primary-500);
     font-weight: bold;
+    display: flex;
+    align-items: center;
   }
   a {
     text-decoration: none;

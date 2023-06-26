@@ -1,6 +1,20 @@
 import AddHotel from "./AddHotel";
-import AllJobs from "./AllJobs";
-import Profile from "./Profile";
+import DeleteHotel from "./DeleteHotel";
+import Cart from "./Cart";
+import WishList from "./WishList";
+import AboutUs from "./AboutUs";
+import Contact from "./Contact";
 import SharedLayout from "./SharedLayout";
 import Stats from "./Stats";
-export { AllJobs, AddHotel, SharedLayout, Profile, Stats };
+import Profile from "./Profile";
+export {
+  AboutUs,
+  AddHotel,
+  DeleteHotel,
+  SharedLayout,
+  Contact,
+  Stats,
+  Cart,
+  WishList,
+  Profile,
+};

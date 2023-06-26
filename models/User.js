@@ -44,6 +44,9 @@ const UserSchema = new mongoose.Schema({
     maxlenght: 20,
     default: "my city",
   },
+  image: {
+    type: String,
+  },
 });
 
 UserSchema.pre("save", async function () {

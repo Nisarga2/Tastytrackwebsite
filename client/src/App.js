@@ -1,11 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Landing, Register, Error, ProtectedRoute } from "./pages";
 import {
-  AllJobs,
+  AboutUs,
   AddHotel,
   SharedLayout,
-  Profile,
+  Contact,
   Stats,
+  Cart,
+  DeleteHotel,
+  WishList,
+  Profile,
 } from "./pages/dashboard";
 
 function App() {
@@ -21,8 +25,12 @@ function App() {
           }
         >
           <Route index element={<Stats />} />
-          <Route path="all-jobs" element={<AllJobs />} />
+          <Route path="about" element={<AboutUs />} />
           <Route path="add-hotel" element={<AddHotel />} />
+          <Route path="cart" element={<Cart />} />
+          <Route path="wishlist" element={<WishList />} />
+          <Route path="delete-hotel" element={<DeleteHotel />} />
+          <Route path="contact" element={<Contact />} />
           <Route path="profile" element={<Profile />} />
         </Route>
         <Route path="/register" element={<Register />} />

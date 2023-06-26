@@ -10,7 +10,7 @@
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "keywords": [],
-  "author": "",
+  "author": "Kumaran Arun",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^7.6.0",
@@ -26,6 +26,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.7.4",
     "morgan": "^1.10.0",
+    "react-iframe": "^1.8.5",
     "validator": "^13.7.0"
   }
 }

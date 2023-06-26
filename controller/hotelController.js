@@ -11,7 +11,17 @@ const createHotel = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ hotel });
 };
 const deleteJob = async (req, res) => {
-  res.send("delete Job");
+  const { id: hotelId } = req.params;
+
+  const hotel = await Hotel.findOne({ _id: hotelId });
+
+  if (!hotel) {
+    throw new NotFoundError(`No job with id :${hotelId}`);
+  }
+
+  await hotel.remove();
+
+  res.status(StatusCodes.OK).json({ msg: "Success! Job removed" });
 };
 const getAllJobs = async (req, res) => {
   const hotel = await Hotel.find({});

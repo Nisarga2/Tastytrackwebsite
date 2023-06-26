@@ -1,0 +1,61 @@
+/* profile.css */
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white; /* Set the background color to white */
+    color: rgb(237, 225, 225); /* Set the text color to black */
+    padding: 10px;
+  }
+  
+  .avtar {
+    filter: drop-shadow(0 0 20px red);
+
+  }
+  
+  .profile-form {
+    margin-top: 20px;
+  }
+  
+  .profile-form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .profile-form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .profile-form input[type="submit"] {
+    background-color: #4caf50;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .profile-container h1 {
+    font-size: 54px;
+    margin-bottom: 10px;
+    color: #870101;
+    animation: marqueeAnimation 10s linear infinite;
+  }
+  
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.5s ease-in;
+  }
+  
+
+  

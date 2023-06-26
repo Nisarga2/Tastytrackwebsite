@@ -10,7 +10,7 @@ const HotelSchema = new mongoose.Schema(
     description: {
       type: String,
       // required: [true, "Please provide company name"],
-      maxlength: 200,
+      // maxlength: 200,
     },
     type: {
       type: String,
@@ -32,6 +32,11 @@ const HotelSchema = new mongoose.Schema(
       // required: [true, "Please provide company name"],
       maxlength: 5,
     },
+    offer: {
+      type: String,
+      // required: [true, "Please provide company name"],
+      maxlength: 2,
+    },
     image: {
       type: String,
       // required: [true, "Please provide company name"],
@@ -43,6 +48,11 @@ const HotelSchema = new mongoose.Schema(
       // maxlength: 5,
     },
     foodImage: {
+      type: Array,
+      // required: [true, "Please provide company name"],
+      // maxlength: 5,
+    },
+    cost: {
       type: Array,
       // required: [true, "Please provide company name"],
       // maxlength: 5,

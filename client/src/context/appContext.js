@@ -10,6 +10,8 @@ import {
   LOGOUT_USER,
   GET_HOTEL_BEGIN,
   GET_HOTEL_SUCCESS,
+  DELETE_HOTEL_BEGIN,
+  DELETE_HOTEL_ERROR,
 } from "./action";
 import reducer from "./reducer";
 
@@ -110,6 +112,21 @@ const AppProvider = ({ children }) => {
     }
     clearAlert();
   };
+
+  const deleteHotel = async (hotelId) => {
+    dispatch({ type: DELETE_HOTEL_BEGIN });
+    try {
+      await authFetch.delete(`/hotel/${hotelId}`);
+      getHotels();
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: DELETE_HOTEL_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
   return (
     <AppContext.Provider
       value={{
@@ -119,6 +136,7 @@ const AppProvider = ({ children }) => {
         toggleSidebar,
         logoutUser,
         getHotels,
+        deleteHotel,
       }}
     >
       {children}
